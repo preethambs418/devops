@@ -1,222 +1,449 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Student Login</title>
 
     <style>
+        /* Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #635bff;
+            --primary-dark: #4f46e5;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #dbe2ea;
+            --error: #dc2626;
+            --success: #15803d;
         }
 
         body {
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 24px 16px;
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #a5b4fc 0,
+                    transparent 38%
+                ),
+                linear-gradient(135deg, #eef2ff, #e0e7ff 50%, #f5f3ff);
         }
 
+        /* Login card */
         .login-box {
-            width: 360px;
-            padding: 40px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 410px;
+            padding: 38px 34px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(49, 46, 129, 0.15);
+            animation: slideUp 0.55s ease-out;
         }
 
-        .login-box h2 {
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 66px;
+            height: 66px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #635bff, #8b5cf6);
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 8px 20px rgba(99, 91, 255, 0.25);
+        }
+
+        h1 {
             text-align: center;
-            margin-bottom: 30px;
-            color: #333;
+            color: var(--text);
+            font-size: clamp(25px, 5vw, 30px);
+            letter-spacing: -0.7px;
+        }
+
+        .subtitle {
+            margin: 10px 0 30px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         .input-box {
-            margin-bottom: 20px;
+            margin-bottom: 21px;
         }
 
-        .input-box label {
+        label {
             display: block;
-            margin-bottom: 7px;
-            color: #555;
+            margin-bottom: 9px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .input-box input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            outline: none;
-            font-size: 15px;
-        }
-
-        .input-box input:focus {
-            border-color: #667eea;
-        }
-
-        /* Password container */
-        .password-container {
+        .input-wrap {
             position: relative;
         }
 
-        .password-container input {
-            padding-right: 70px;
+        .input-wrap input {
+            width: 100%;
+            min-height: 49px;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+            font-size: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-wrap input::placeholder {
+            color: #94a3b8;
+        }
+
+        .input-wrap input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 91, 255, 0.12);
+        }
+
+        .input-wrap input[aria-invalid="true"] {
+            border-color: var(--error);
+        }
+
+        .password-input {
+            padding-right: 75px !important;
         }
 
         .show-password {
             position: absolute;
-            right: 10px;
             top: 50%;
+            right: 12px;
             transform: translateY(-50%);
+            padding: 6px 2px;
             border: none;
-            background: none;
-            color: #667eea;
-            cursor: pointer;
+            background: transparent;
+            color: var(--primary-dark);
             font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .show-password:focus-visible,
+        a:focus-visible,
+        .login-btn:focus-visible {
+            outline: 3px solid #a5b4fc;
+            outline-offset: 3px;
+        }
+
+        .hint {
+            display: block;
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
         }
 
         .forgot {
-            text-align: right;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+            margin: -3px 0 22px;
         }
 
-        .forgot a {
-            color: #667eea;
+        a {
+            color: var(--primary-dark);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        button.login-btn {
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
             width: 100%;
-            padding: 12px;
+            min-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             border: none;
-            border-radius: 8px;
-            background: #667eea;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #635bff, #5145e5);
             color: white;
             font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 8px 18px rgba(99, 91, 255, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        button.login-btn:hover {
-            background: #5568d8;
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px rgba(99, 91, 255, 0.28);
         }
 
-        .signup {
-            text-align: center;
-            margin-top: 20px;
-            color: #555;
-        }
-
-        .signup a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: bold;
+        .login-btn:active {
+            transform: translateY(0);
         }
 
         #message {
+            display: none;
+            margin-top: 17px;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
-            margin-top: 15px;
-            color: green;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        #message.success {
+            display: block;
+            color: var(--success);
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+
+        #message.error {
+            display: block;
+            color: var(--error);
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .signup {
+            margin-top: 25px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .signup a {
+            margin-left: 3px;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #94a3b8;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        /* Tablet and mobile */
+        @media (max-width: 480px) {
+            body {
+                padding: 18px 14px;
+            }
+
+            .login-box {
+                padding: 30px 22px;
+                border-radius: 20px;
+            }
+
+            .logo {
+                width: 58px;
+                height: 58px;
+                font-size: 26px;
+                border-radius: 17px;
+            }
+
+            .subtitle {
+                margin-bottom: 25px;
+            }
+        }
+
+        /* Respect reduced-motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="login-box">
+    <main class="login-box">
 
-        <h2>Student Login</h2>
+        <div class="logo" aria-hidden="true">🎓</div>
 
-        <form onsubmit="login(event)">
+        <h1>Student Login</h1>
+
+        <p class="subtitle">
+            Welcome back! Sign in to access your student account.
+        </p>
+
+        <form id="loginForm">
 
             <div class="input-box">
-                <label>Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    required
-                >
+                <label for="email">Email Address</label>
+
+                <div class="input-wrap">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        autocomplete="username"
+                        maxlength="254"
+                        required
+                    >
+                </div>
             </div>
 
             <div class="input-box">
-                <label>Password</label>
+                <label for="password">Password</label>
 
-                <div class="password-container">
+                <div class="input-wrap">
                     <input
                         type="password"
                         id="password"
+                        name="password"
+                        class="password-input"
                         placeholder="Enter your password"
+                        autocomplete="current-password"
+                        minlength="8"
+                        maxlength="128"
+                        aria-describedby="passwordHint"
                         required
                     >
 
                     <button
                         type="button"
                         class="show-password"
-                        onclick="togglePassword()"
+                        id="togglePassword"
+                        aria-controls="password"
+                        aria-pressed="false"
                     >
                         Show
                     </button>
                 </div>
+
+                <small class="hint" id="passwordHint">
+                    Password must be at least 8 characters.
+                </small>
             </div>
 
             <div class="forgot">
-                <a href="#">Forgot Password?</a>
+                <a href="forgot-password.html">Forgot Password?</a>
             </div>
 
             <button type="submit" class="login-btn">
                 Login
             </button>
 
-            <p id="message"></p>
+            <p id="message" role="status" aria-live="polite"></p>
 
             <div class="signup">
                 Don't have an account?
-                <a href="#">Sign Up</a>
+                <a href="signup.html">Sign Up</a>
             </div>
 
         </form>
-    </div>
+
+        <p class="footer">
+            © 2026 Student Portal. All rights reserved.
+        </p>
+
+    </main>
 
     <script>
+        const form = document.getElementById("loginForm");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const toggleButton = document.getElementById("togglePassword");
+        const message = document.getElementById("message");
 
-        // Show / Hide password
-        function togglePassword() {
+        // Show or hide the password
+        toggleButton.addEventListener("click", function () {
+            const isHidden = passwordInput.type === "password";
 
-            let password = document.getElementById("password");
-            let button = document.querySelector(".show-password");
+            passwordInput.type = isHidden ? "text" : "password";
+            toggleButton.textContent = isHidden ? "Hide" : "Show";
+            toggleButton.setAttribute("aria-pressed", String(isHidden));
+        });
 
-            if (password.type === "password") {
-                password.type = "text";
-                button.textContent = "Hide";
-            } else {
-                password.type = "password";
-                button.textContent = "Show";
-            }
-        }
+        // Clear the previous status when the user edits the form
+        form.addEventListener("input", function () {
+            message.textContent = "";
+            message.className = "";
 
-        // Login function
-        function login(event) {
+            emailInput.removeAttribute("aria-invalid");
+            passwordInput.removeAttribute("aria-invalid");
+        });
 
+        // Validate the form before submitting
+        form.addEventListener("submit", function (event) {
             event.preventDefault();
 
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
-            let message = document.getElementById("message");
+            message.textContent = "";
+            message.className = "";
 
-            if (email && password) {
-                message.style.color = "green";
-                message.textContent = "Login successful!";
-            } else {
-                message.style.color = "red";
-                message.textContent = "Please enter all details.";
+            emailInput.value = emailInput.value.trim();
+
+            if (!emailInput.checkValidity()) {
+                emailInput.setAttribute("aria-invalid", "true");
+                message.textContent = "Please enter a valid email address.";
+                message.className = "error";
+                emailInput.focus();
+                return;
             }
-        }
 
+            if (passwordInput.value.length < 8) {
+                passwordInput.setAttribute("aria-invalid", "true");
+                message.textContent =
+                    "Password must be at least 8 characters long.";
+                message.className = "error";
+                passwordInput.focus();
+                return;
+            }
+
+            if (passwordInput.value.length > 128) {
+                passwordInput.setAttribute("aria-invalid", "true");
+                message.textContent =
+                    "Password cannot exceed 128 characters.";
+                message.className = "error";
+                passwordInput.focus();
+                return;
+            }
+
+            // Frontend validation only.
+            // Connect a secure authentication backend here.
+            message.textContent =
+                "Form validation successful! Connect your authentication service to log in.";
+            message.className = "success";
+        });
     </script>
 
 </body>
