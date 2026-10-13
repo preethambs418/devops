@@ -393,7 +393,6 @@
             toggleButton.textContent = isHidden ? "Hide" : "Show";
             toggleButton.setAttribute("aria-pressed", String(isHidden));
         });
-
         // Clear the previous status when the user edits the form
         form.addEventListener("input", function () {
             message.textContent = "";
